@@ -21,14 +21,15 @@ app.use(cors());
 app.use('/api/students', require('./routes/studentRoutes')); // Student routes
 app.use('/api/colleges', require('./routes/collegeRoutes')); // College routes
 app.use('/api/auth', require('./routes/authRoutes')); // Authentication routes
-// Serve React App (Catch-all route)
+// Serve static files from the React app
 if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, 'client/build')));
+    app.use(express.static(path.join(__dirname, '../frontend/build')));
 
     // Catch-all route to serve the React app
-    app.get('/api/example', (req, res) => {
-        res.json({ message: 'Hello from the backend!' });
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
     });
+    
 }
 // Listen to the port
 const PORT = process.env.PORT || 5000;
