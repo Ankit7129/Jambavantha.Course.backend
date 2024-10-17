@@ -22,15 +22,19 @@ app.use('/api/students', require('./routes/studentRoutes')); // Student routes
 app.use('/api/colleges', require('./routes/collegeRoutes')); // College routes
 app.use('/api/auth', require('./routes/authRoutes')); // Authentication routes
 // Serve static files from the React app
-if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '../frontend/build')));
+//if (process.env.NODE_ENV === 'production') {
+   // app.use(express.static(path.join(__dirname, '../frontend/build')));
 
     // Catch-all route to serve the React app
-    app.get('*', (req, res) => {
-        res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
+   // app.get('*', (req, res) => {
+      //  res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
+        // Root route
+app.get('/', (req, res) => {
+    res.send('Welcome to the College Registration API');
     });
     
-}
+    
+
 // Listen to the port
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
