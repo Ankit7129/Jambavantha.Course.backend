@@ -26,8 +26,8 @@ if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, 'client/build')));
 
     // Catch-all route to serve the React app
-    app.get('*', (req, res) => {
-        res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+    app.get('/api/example', (req, res) => {
+        res.json({ message: 'Hello from the backend!' });
     });
 }
 // Listen to the port
