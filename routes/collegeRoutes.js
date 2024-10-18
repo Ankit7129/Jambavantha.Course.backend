@@ -6,7 +6,7 @@ const {
     logoutCollege,
     verifyEmail,  // Add the verifyEmail function
     getCollegeById
-} = require('../controllers/collegeController'); // Correct naming here
+} = require('../controllers/CollegeController'); // Correct naming here
 
 // Register college
 router.post('/register', registerCollege);
