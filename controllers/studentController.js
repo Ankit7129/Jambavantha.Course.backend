@@ -55,10 +55,23 @@ const loginStudent = async (req, res) => {
         const isMatch = await bcrypt.compare(password, student.password);
         if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
 
-        // Return JWT
+        // Return JWT and student details
         const payload = { studentID: student.id };
         const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.status(200).json({ token });
+
+        // Send response with token and student information
+        res.status(200).json({
+            success: true,
+            token,
+            studentID: student.id, // Include student ID
+            student: {
+                name: student.name,
+                email: student.email,
+                phoneNumber: student.phoneNumber,
+                educationalBackground: student.educationalBackground,
+                // Add other fields you want to include
+            }
+        });
     } catch (error) {
         console.error('Error during login:', error);
         res.status(500).json({ message: 'Server error' });
@@ -72,8 +85,44 @@ const logoutStudent = (req, res) => {
     res.status(200).json({ message: 'Logout successful' });
 };
 
+// Get student profile (optional)
+const getStudentProfile = async (req, res) => {
+    const { studentID } = req.params; // Assuming student ID is passed as a route parameter
+
+    try {
+        const student = await Student.findById(studentID).select('-password'); // Exclude password from response
+        if (!student) return res.status(404).json({ message: 'Student not found' });
+        res.status(200).json(student);
+    } catch (error) {
+        console.error('Error fetching student profile:', error);
+        res.status(500).json({ message: 'Server error while fetching student profile' });
+    }
+};
+
+// Update student information (optional)
+const updateStudentProfile = async (req, res) => {
+    const { studentID } = req.params; // Assuming student ID is passed as a route parameter
+    const { name, phoneNumber, educationalBackground } = req.body;
+
+    try {
+        const student = await Student.findByIdAndUpdate(
+            studentID,
+            { name, phoneNumber, educationalBackground },
+            { new: true, runValidators: true } // Return updated document and run validators
+        );
+
+        if (!student) return res.status(404).json({ message: 'Student not found' });
+        res.status(200).json(student);
+    } catch (error) {
+        console.error('Error updating student profile:', error);
+        res.status(500).json({ message: 'Server error while updating student profile' });
+    }
+};
+
 module.exports = {
     registerStudent,
     loginStudent,
-    logoutStudent, // Include the logout function in the export
+    logoutStudent,
+    getStudentProfile, // Export the profile retrieval function
+    updateStudentProfile // Export the profile update function
 };

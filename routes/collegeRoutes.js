@@ -4,9 +4,9 @@ const {
     registerCollege,
     loginCollege,
     logoutCollege,
-    verifyEmail // Add the verifyEmail function
-    
-} = require('../controllers/collegeController');
+    verifyEmail,  // Add the verifyEmail function
+    getCollegeById
+} = require('../controllers/CollegeController'); // Correct naming here
 
 // Register college
 router.post('/register', registerCollege);
@@ -17,6 +17,7 @@ router.post('/login', loginCollege);
 // Logout college
 router.post('/logout', logoutCollege); // Logout route
 
-
+// Route to get college by ID
+router.get('/get-college/:id', getCollegeById); // Use destructured getCollegeById
 
 module.exports = router;
